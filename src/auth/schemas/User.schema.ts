@@ -26,5 +26,8 @@ export class User extends Document {
 
   @Prop({ required: [true, 'phone number cannot empty'] })
   phoneNumber: number;
+
+  @Prop({ default: 'client' })
+  role: string;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

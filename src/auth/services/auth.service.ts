@@ -34,22 +34,24 @@ export class AuthService {
         throw new UnauthorizedException('password is wrong !!');
       }
 
+      const payload = {
+        sub: user._id,
+        name: user.username,
+        role: user.role,
+      };
+
       const accessToken = await this.jwtService.signAsync(
-        { payload: loginDto },
+        { payload: payload },
         { secret: process.env.ACCESS_SECRET, expiresIn: '1d' },
       );
       const refreshToken = await this.jwtService.signAsync(
-        { payload: loginDto },
+        { payload: payload },
         { secret: process.env.REFRESH_SECRET, expiresIn: '15d' },
       );
 
       return {
         accessToken: accessToken,
         refreshToken: refreshToken,
-        info: {
-          ...loginDto,
-          password: await bcrypt.hash(loginDto.password, 10),
-        },
       };
     } catch (error) {
       console.log(error);
@@ -70,7 +72,7 @@ export class AuthService {
     }
   }
 
-  // tao accesstoken
+  // tao accessToken
   async generateAccessToken(payload: any): Promise<string> {
     return this.jwtService.signAsync(
       { payload },
