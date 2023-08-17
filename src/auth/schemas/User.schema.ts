@@ -24,8 +24,8 @@ export class User extends Document {
   @Prop()
   age: number;
 
-  @Prop({ required: [true, 'phone number cannot empty'] })
-  phoneNumber: number;
+  @Prop({ required: [true, 'phone number cannot empty'], unique: true })
+  phoneNumber: string;
 
   @Prop({ default: 'client' })
   role: string;

@@ -17,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // dang nhap
+  // sign in
   async Login(loginDto) {
     try {
       const user = await this.userModel.findOne({
@@ -72,7 +72,7 @@ export class AuthService {
     }
   }
 
-  // tao accessToken
+  // create accessToken
   async generateAccessToken(payload: any): Promise<string> {
     return this.jwtService.signAsync(
       { payload },
@@ -83,7 +83,7 @@ export class AuthService {
     );
   }
 
-  // dang ky
+  // register
   async Register(registerDto): Promise<any> {
     try {
       const findUser = await this.userModel.findOne({
