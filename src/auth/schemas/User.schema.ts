@@ -29,5 +29,8 @@ export class User extends Document {
 
   @Prop({ default: 'client' })
   role: string;
+
+  @Prop({ default: undefined })
+  isBusiness: boolean;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

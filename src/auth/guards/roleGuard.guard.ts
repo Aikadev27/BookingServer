@@ -30,7 +30,7 @@ export class RolesGuard implements CanActivate {
     if (!hasPermission) {
       throw new UnauthorizedException('Access denied');
     }
-    console.log('role of user :', userRoles);
+    console.log('Your role :', userRoles);
 
     return true;
   }

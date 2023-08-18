@@ -53,6 +53,14 @@ export class UserController {
   @UseGuards(AuthGuard, RolesGuard)
   @Delete('delete-user-by-id/:id')
   async deleteById(@Param('id') id: string) {
-    return this.userService.deleteById(id);
+    return await this.userService.deleteById(id);
+  }
+  // Find user list by Role
+
+  @Get('by-user-role/:role')
+  @Roles('admin')
+  @UseGuards(AuthGuard, RolesGuard)
+  async findListUserByRole(@Param('role') role: string): Promise<User[]> {
+    return await this.userService.findListUserByRole(role);
   }
 }

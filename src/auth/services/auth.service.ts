@@ -90,6 +90,7 @@ export class AuthService {
         username: registerDto.username,
         email: registerDto.email,
       });
+
       if (
         findUser &&
         (findUser.username === registerDto.username ||
@@ -97,11 +98,22 @@ export class AuthService {
       ) {
         return new UnauthorizedException('invalid user');
       }
+      const isBusinessRole: boolean = registerDto.isBusiness;
+      let defaultRole: string = '';
+      if (isBusinessRole === false) {
+        defaultRole = 'client';
+      } else if (isBusinessRole === true) {
+        defaultRole = 'business';
+      } else {
+        defaultRole = registerDto.role;
+      }
+      console.log(isBusinessRole, defaultRole);
 
       const hashPass = await bcrypt.hash(registerDto.password, 10);
       const user = await this.userModel.create({
         ...registerDto,
         password: hashPass,
+        role: defaultRole,
       });
 
       return {

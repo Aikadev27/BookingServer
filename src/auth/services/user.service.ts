@@ -22,7 +22,7 @@ export class UserService {
       }
       return user;
     } catch (error) {
-      throw new Error();
+      throw error;
     }
   }
 
@@ -49,6 +49,8 @@ export class UserService {
       }
       return { message: 'update success' };
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -63,7 +65,23 @@ export class UserService {
       }
       return { message: 'delete user success' };
     } catch (error) {
-      throw new error();
+      throw error;
+    }
+  }
+
+  async findListUserByRole(role: string): Promise<any[]> {
+    try {
+      const listUser: User[] = await this.userModel.find({ role: role });
+      if (listUser.length === 0) {
+        throw new NotFoundException(
+          `list user with role is: ${role} not exist`,
+        );
+      }
+      return [{ totalList: listUser.length }, { data: listUser }];
+    } catch (error) {
+      console.log(error);
+
+      throw error;
     }
   }
 }
