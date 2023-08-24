@@ -1,5 +1,6 @@
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+import { Booking } from 'src/reservationManagement/Booking/schema/Booking.schema';
 
 @Schema({
   timestamps: true,
@@ -32,5 +33,9 @@ export class User extends Document {
 
   @Prop({ default: undefined })
   isBusiness: boolean;
+
+  // lich su dat phong
+  @Prop([{ type: mongoose.Schema.ObjectId, ref: 'Booking' }])
+  bookingHistory: Booking[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);

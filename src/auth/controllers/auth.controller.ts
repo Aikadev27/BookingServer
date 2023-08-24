@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-@Controller('auth')
+@Controller('api/v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

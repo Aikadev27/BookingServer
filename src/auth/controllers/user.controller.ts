@@ -16,7 +16,7 @@ import { Roles } from '../decoretors/role.decorator';
 import { RolesGuard } from '../guards/roleGuard.guard';
 import { AuthGuard } from '../guards/auth.guard';
 
-@Controller('user')
+@Controller('api/v1/user')
 export class UserController {
   constructor(private userService: UserService) {}
   //   findOne User
