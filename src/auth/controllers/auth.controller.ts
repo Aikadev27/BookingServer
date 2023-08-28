@@ -1,6 +1,6 @@
 import { LoginDto } from '../dtos/login.dto';
 import { RefreshTokenDto } from '../dtos/refreshToken.dto';
-import { RegisterDto } from '../dtos/rigister.dto';
+import { RegisterDto } from '../dtos/register.dto';
 
 import { AuthService } from '../services/auth.service';
 import {
@@ -18,7 +18,7 @@ export class AuthController {
   // register/signup
   @Post('register')
   @UsePipes(new ValidationPipe())
-  async Register(@Body() registerDto: RegisterDto) {
+  Register(@Body() registerDto: RegisterDto) {
     return this.authService.Register(registerDto);
   }
   // login

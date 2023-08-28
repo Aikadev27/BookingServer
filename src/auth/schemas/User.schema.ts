@@ -28,6 +28,9 @@ export class User extends Document {
   @Prop({ required: [true, 'phone number cannot empty'], unique: true })
   phoneNumber: string;
 
+  @Prop({ default: '' })
+  avatarUrl: string;
+
   @Prop({ default: 'client' })
   role: string;
 

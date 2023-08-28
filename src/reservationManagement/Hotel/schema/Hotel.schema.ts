@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { Room } from '../Room/schema/Room.schema';
 import { Location } from './Location.schema';
 import { User } from 'src/auth/schemas/User.schema';
+import { Review } from './Review.schema';
 
 @Schema({
   timestamps: true,
@@ -38,7 +39,14 @@ export class Hotel extends Document {
 
   @Prop({ default: 0 })
   averageRating: number;
+
+  @Prop({ default: 0 })
+  totalRating: number;
+
   @Prop([{ type: mongoose.Schema.ObjectId, ref: 'Room' }])
   rooms: Room[];
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
+  reviews: Review[];
 }
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

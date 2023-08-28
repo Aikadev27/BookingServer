@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { User } from '../schemas/User.schema';
 import { UserService } from '../services/user.service';
-import { RegisterDto } from '../dtos/rigister.dto';
+import { RegisterDto } from '../dtos/register.dto';
 import { Roles } from '../decoretors/role.decorator';
 import { RolesGuard } from '../guards/roleGuard.guard';
 import { AuthGuard } from '../guards/auth.guard';
@@ -22,10 +22,8 @@ export class UserController {
   //   findOne User
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
-  @Get('by-identifier/:identifier')
-  async findByIdentifier(
-    @Param('identifier') identifier: string,
-  ): Promise<User> {
+  @Get('get-by-identifier/:identifier')
+  findByIdentifier(@Param('identifier') identifier: string): Promise<User> {
     return this.userService.findByNameOrPhoneNumber(identifier);
   }
 
@@ -33,34 +31,38 @@ export class UserController {
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
   @Get('get-all-user')
-  async getAllUser() {
-    return await this.userService.getAllUser();
+  getAllUser() {
+    return this.userService.getAllUser();
   }
-  //   update user
 
+  // get user  by Id
+  @Get('get-by-id/:id')
+  GetById(@Param('id') id: string) {
+    return this.userService.GetById(id);
+  }
+
+  // Find user list by Role
+
+  @Get('get-by-user-role/:role')
+  @Roles('admin')
+  @UseGuards(AuthGuard, RolesGuard)
+  findListUserByRole(@Param('role') role: string): Promise<User[]> {
+    return this.userService.findListUserByRole(role);
+  }
+
+  //   update user
   @Roles('admin', 'client')
   @UseGuards(AuthGuard, RolesGuard)
-  @Patch('update-user/:username')
+  @Patch('update-user/:id')
   @UsePipes(new ValidationPipe())
-  async updateUser(
-    @Body() updateData: RegisterDto,
-    @Param('username') username: string,
-  ) {
-    return this.userService.updateUser(updateData, username);
+  updateUser(@Body() updateData: RegisterDto, @Param('id') id: string) {
+    this.userService.updateUser(updateData, id);
   }
   //   delete user by Id
   @Roles('admin')
   @UseGuards(AuthGuard, RolesGuard)
   @Delete('delete-user-by-id/:id')
-  async deleteById(@Param('id') id: string) {
-    return await this.userService.deleteById(id);
-  }
-  // Find user list by Role
-
-  @Get('by-user-role/:role')
-  @Roles('admin')
-  @UseGuards(AuthGuard, RolesGuard)
-  async findListUserByRole(@Param('role') role: string): Promise<User[]> {
-    return await this.userService.findListUserByRole(role);
+  deleteById(@Param('id') id: string) {
+    return this.userService.deleteById(id);
   }
 }

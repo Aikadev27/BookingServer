@@ -8,6 +8,7 @@ import { Location, LocationSchema } from './schema/Location.schema';
 import { LocationService } from './services/location.service';
 import { User, UserSchema } from 'src/auth/schemas/User.schema';
 import { JwtModule } from '@nestjs/jwt';
+import { Review, ReviewSchema } from './schema/Review.schema';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
     MongooseModule.forFeature([
       { name: Location.name, schema: LocationSchema },
     ]),
+    MongooseModule.forFeature([{ name: Review.name, schema: ReviewSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
 
     JwtModule.register({
