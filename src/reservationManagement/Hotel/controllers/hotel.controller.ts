@@ -16,7 +16,6 @@ import { createHotelDto } from '../dtos/createHotel.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Roles } from 'src/auth/decoretors/role.decorator';
 import { RolesGuard } from 'src/auth/guards/roleGuard.guard';
-import { createReviewDto } from '../dtos/createReview.dto';
 
 @Controller('api/v1/hotel')
 export class HotelController {
@@ -73,19 +72,5 @@ export class HotelController {
   @UseGuards(AuthGuard, RolesGuard)
   deleteHotelById(@Param('id') id: string) {
     return this.hotelService.deleteHotelById(id);
-  }
-
-  // POST: create rating and review
-
-  @Post('/rating-by-id/:id/review')
-  @UseGuards(AuthGuard)
-  @UsePipes(new ValidationPipe())
-  createRatingAndReview(
-    @Param('id') hotelId: string,
-    @Request() req,
-    @Body() createReview: createReviewDto,
-  ) {
-    const userId = req.user.payload.id;
-    return this.hotelService.reviewAndRating(hotelId, userId, createReview);
   }
 }

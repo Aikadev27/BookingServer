@@ -148,32 +148,6 @@ export class HotelService {
     }
   }
 
-  async reviewAndRating(hotelId: string, userId, createReview) {
-    try {
-      const hotel = await this.hotelModel.findById(hotelId);
-      if (!hotel) {
-        throw new NotFoundException('cannot find hotel');
-      }
-
-      const review = new this.reviewModel({
-        ...createReview,
-        userId,
-        hotelId,
-      });
-      hotel.reviews.push(review);
-      hotel.rateCount = hotel.rateCount + 1;
-      hotel.totalRating = hotel.totalRating + createReview.rating;
-      hotel.averageRating = parseFloat(
-        (hotel.totalRating / hotel.rateCount).toFixed(1),
-      );
-      await review.save();
-      await hotel.save();
-      return hotel;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async getAllHotels(): Promise<Hotel[]> {
     try {
       const listHotels = await this.hotelModel.find();

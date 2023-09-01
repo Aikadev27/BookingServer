@@ -9,6 +9,8 @@ import { LocationService } from './services/location.service';
 import { User, UserSchema } from 'src/auth/schemas/User.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { Review, ReviewSchema } from './schema/Review.schema';
+import { ReviewController } from './controllers/review.controller';
+import { ReviewService } from './services/review.service';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { Review, ReviewSchema } from './schema/Review.schema';
       secret: process.env.ACCESS_SECRET,
     }),
   ],
-  controllers: [HotelController],
-  providers: [HotelService, LocationService],
+  controllers: [HotelController, ReviewController],
+  providers: [HotelService, LocationService, ReviewService],
 })
 export class HotelModule {}
