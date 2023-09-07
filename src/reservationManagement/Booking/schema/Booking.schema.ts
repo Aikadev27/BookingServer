@@ -18,5 +18,8 @@ export class Booking extends Document {
 
   @Prop()
   checkOutDate: Date;
+
+  @Prop()
+  userQuantity: number;
 }
 export const BookingSchema = SchemaFactory.createForClass(Booking);

@@ -73,4 +73,21 @@ export class HotelController {
   deleteHotelById(@Param('id') id: string) {
     return this.hotelService.deleteHotelById(id);
   }
+
+  @Patch('/add-img-by-id/:hotelId')
+  @Roles('business')
+  @UseGuards(AuthGuard, RolesGuard)
+  addImage(@Param('hotelId') hotelId: string, @Body() { imageUrl }) {
+    return this.hotelService.addImage(hotelId, imageUrl);
+  }
+
+  @Delete(':hotelId/delete-img-by-index/:imgIndex')
+  @Roles('business')
+  @UseGuards(AuthGuard, RolesGuard)
+  deleteImgByIndex(
+    @Param('hotelId') hotelId: string,
+    @Param('imgIndex') imgIndex: number,
+  ) {
+    return this.hotelService.deleteImgByIndex(hotelId, imgIndex);
+  }
 }

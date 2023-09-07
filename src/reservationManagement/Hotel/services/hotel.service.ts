@@ -160,4 +160,36 @@ export class HotelService {
       throw error;
     }
   }
+
+  async addImage(hotelId, imageUrl) {
+    try {
+      const hotel = await this.hotelModel.findById(hotelId);
+      if (!hotel) {
+        throw new NotFoundException();
+      }
+      hotel.featuredImageUrl.push(imageUrl);
+      await hotel.save();
+      return { message: 'add image success' };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteImgByIndex(hotelId, imgIndex) {
+    try {
+      const hotel = await this.hotelModel.findById(hotelId);
+      if (!hotel) {
+        throw new NotFoundException();
+      }
+      if (imgIndex < 0 || imgIndex >= hotel.featuredImageUrl.length) {
+        throw new NotFoundException(`Image index ${imgIndex} not found.`);
+      }
+      hotel.featuredImageUrl.splice(imgIndex, 1);
+      await hotel.save();
+
+      return { message: 'delete image success' };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
