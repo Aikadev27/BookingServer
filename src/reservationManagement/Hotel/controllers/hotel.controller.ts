@@ -40,8 +40,6 @@ export class HotelController {
 
   // GET: get hotel by Id
   @Get('/get-by-id/:id')
-  @Roles('admin', 'business')
-  @UseGuards(AuthGuard, RolesGuard)
   GetHotelById(@Param('id') id: string) {
     return this.hotelService.GetHotelById(id);
   }
@@ -64,7 +62,9 @@ export class HotelController {
   // GET: get all hotel
 
   @Get('get-all-hotels')
-  getAllHotels() {}
+  getAllHotels() {
+    return this.hotelService.getAllHotels();
+  }
 
   // DELETE: delete 1 hotel by id
   @Delete('/delete-by-id/:id')

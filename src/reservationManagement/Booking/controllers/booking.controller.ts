@@ -33,7 +33,7 @@ export class BookingController {
 
   // user dat phong
 
-  @Post('/reserve-room-id/:id')
+  @Post('/reserve-room-id/:roomId')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   reserveRoom(
@@ -41,7 +41,7 @@ export class BookingController {
     @Body() reserveForm: createReserveDto,
     @Request() req,
   ) {
-    const userId = req.user.payload.userId;
+    const userId = req.user.payload.id;
     return this.bookingService.reserveRoom(userId, reserveForm, roomId);
   }
 }

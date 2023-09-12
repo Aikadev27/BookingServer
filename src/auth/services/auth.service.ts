@@ -17,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // sign in
+  // log in
   async Login(loginDto) {
     try {
       const user = await this.userModel.findOne({
@@ -107,7 +107,7 @@ export class AuthService {
       } else {
         defaultRole = registerDto.role;
       }
-      console.log(isBusinessRole, defaultRole);
+      
 
       const hashPass = await bcrypt.hash(registerDto.password, 10);
       const user = await this.userModel.create({

@@ -79,7 +79,7 @@ export class RoomService {
       hotel.rooms.push(newRoom);
       await newRoom.save();
       await hotel.save();
-      return { message: `create room ${createRoomForm.rom} success` };
+      return { message: `create room ${createRoomForm.roomNumber} success` };
     } catch (error) {
       throw error;
     }

@@ -2,10 +2,10 @@ import { IsNotEmpty } from 'class-validator';
 
 export class createReserveDto {
   @IsNotEmpty()
-  checkInDate: Date;
+  checkInDate: string;
 
   @IsNotEmpty()
-  checkOutDate: Date;
+  checkOutDate: string;
 
   @IsNotEmpty()
   userQuantity: number;

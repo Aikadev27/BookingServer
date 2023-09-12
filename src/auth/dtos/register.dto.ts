@@ -36,4 +36,6 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   phoneNumber: string;
+
+  isBusiness: boolean;
 }

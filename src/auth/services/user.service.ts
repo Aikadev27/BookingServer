@@ -34,7 +34,11 @@ export class UserService {
 
   async GetById(id: string): Promise<User> {
     try {
-      const findUser = await this.userModel.findById(id);
+      const findUser = await this.userModel
+        .findById(id)
+        .select('-password')
+        .exec();
+
       if (!findUser) {
         throw new NotFoundException(`user with id:${id} not found or exist`);
       }
