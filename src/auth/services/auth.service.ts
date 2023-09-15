@@ -1,7 +1,6 @@
 import {
   Injectable,
   UnauthorizedException,
-  HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -19,12 +18,16 @@ export class AuthService {
 
   // log in
   async Login(loginDto) {
+    console.log(loginDto);
+
     try {
-      const user = await this.userModel.findOne({
-        email: loginDto.email,
-      });
+      const user = await this.userModel
+        .findOne({
+          email: loginDto.email,
+        })
+        .select('-__v -createdAt -updatedAt');
       if (!user) {
-        throw new NotFoundException('not found user');
+        throw new NotFoundException('email is wrong');
       }
       const isPassword = await bcrypt.compareSync(
         loginDto.password,
@@ -40,6 +43,8 @@ export class AuthService {
         role: user.role,
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...info } = user.toJSON();
       const accessToken = await this.jwtService.signAsync(
         { payload: payload },
         { secret: process.env.ACCESS_SECRET, expiresIn: '1d' },
@@ -50,11 +55,14 @@ export class AuthService {
       );
 
       return {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        info,
+        accessToken,
+        refreshToken,
       };
     } catch (error) {
       console.log(error);
+
+      throw error;
     }
   }
 
@@ -96,7 +104,9 @@ export class AuthService {
         (findUser.username === registerDto.username ||
           findUser.email === registerDto.email)
       ) {
-        return new UnauthorizedException('invalid user');
+        return new UnauthorizedException(
+          'The account already exists, please choose another account name',
+        );
       }
       const isBusinessRole: boolean = registerDto.isBusiness;
       let defaultRole: string = '';
@@ -107,7 +117,6 @@ export class AuthService {
       } else {
         defaultRole = registerDto.role;
       }
-      
 
       const hashPass = await bcrypt.hash(registerDto.password, 10);
       const user = await this.userModel.create({
@@ -117,14 +126,13 @@ export class AuthService {
       });
 
       return {
-        status: HttpStatus.OK,
-        message: 'create user success',
+        message: 'create account success',
         userInfo: user,
       };
     } catch (error) {
       console.log(error);
 
-      throw new Error('register failed');
+      throw error('register failed');
     }
   }
 }
