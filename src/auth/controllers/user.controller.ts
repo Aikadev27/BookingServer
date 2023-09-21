@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { User } from '../schemas/User.schema';
 import { UserService } from '../services/user.service';
-import { RegisterDto } from '../dtos/register.dto';
 import { Roles } from '../decoretors/role.decorator';
 import { RolesGuard } from '../guards/roleGuard.guard';
 import { AuthGuard } from '../guards/auth.guard';
@@ -51,11 +50,11 @@ export class UserController {
   }
 
   //   update user
-  @Roles('admin', 'client')
-  @UseGuards(AuthGuard, RolesGuard)
+
+  @UseGuards(AuthGuard)
   @Patch('update-user/:id')
   @UsePipes(new ValidationPipe())
-  updateUser(@Body() updateData: RegisterDto, @Param('id') id: string) {
+  updateUser(@Body() updateData, @Param('id') id: string) {
     this.userService.updateUser(updateData, id);
   }
   //   delete user by Id
