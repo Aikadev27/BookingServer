@@ -76,7 +76,10 @@ export class HotelService {
 
   async GetHotelById(id: string): Promise<Hotel> {
     try {
-      const findHotel = await this.hotelModel.findById(id);
+      const findHotel = await this.hotelModel
+        .findById(id)
+        .populate('rooms')
+        .populate('location');
       if (!findHotel) {
         throw new NotFoundException('hotel not found');
       }
@@ -150,7 +153,7 @@ export class HotelService {
 
   async getAllHotels(): Promise<Hotel[]> {
     try {
-      const listHotels = await this.hotelModel.find();
+      const listHotels = await this.hotelModel.find().populate('location');
       if (listHotels.length < 0) {
         throw new NotFoundException('list hotel is null');
       }
