@@ -8,7 +8,7 @@ import { Room } from 'src/reservationManagement/Hotel/Room/schema/Room.schema';
 })
 export class Booking extends Document {
   @Prop({ type: mongoose.Schema.ObjectId, ref: 'User' })
-  customerId: User;
+  customer: User;
 
   @Prop({ type: mongoose.Schema.ObjectId, ref: 'Room' })
   room: Room;

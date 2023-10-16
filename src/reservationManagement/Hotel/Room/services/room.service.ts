@@ -28,6 +28,20 @@ export class RoomService {
     }
   }
 
+  async getRoomById(id: string): Promise<Room> {
+    try {
+      const room = await this.roomModel
+        .findById(id)
+        .select('-createAt -updateAt');
+      if (!room) {
+        throw new NotFoundException(`room with ${id} not found`);
+      }
+      return room;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async addImage(roomId, imageUrl) {
     try {
       const room = await this.roomModel.findById(roomId);

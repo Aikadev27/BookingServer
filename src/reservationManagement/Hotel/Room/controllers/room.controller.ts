@@ -28,6 +28,11 @@ export class RoomController {
     return this.roomService.getRoomsByStatus(bookingStatus);
   }
 
+  @Get('get-room-by-id/:id')
+  getRoomById(@Param('id') id: string) {
+    return this.roomService.getRoomById(id);
+  }
+
   @Patch('/add-img-by-id/:roomId')
   @Roles('business')
   @UseGuards(AuthGuard, RolesGuard)

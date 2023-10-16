@@ -14,18 +14,28 @@ export class BookingService {
   ) {}
   async getBookingHistory(userId: string): Promise<Booking[]> {
     try {
-      const findUser = await this.userModel
-        .findById(userId)
-        .populate('bookingHistory.room');
+      const findUser = await this.userModel.findById(userId);
 
       if (!findUser) {
         throw new NotFoundException({ message: 'invalid user' });
       }
 
-      return findUser.bookingHistory;
+      const populatedBookings = await this.bookingModel
+        .find({ customer: findUser._id })
+        .populate('customer', 'username') // Chọn các trường từ đối tượng User
+        .populate('room', 'roomNumber roomType pricePerNight floor')
+        .select('userQuantity checkInDate checkOutDate') // Chọn các trường từ đối tượng Room)
+        .exec();
+      return populatedBookings;
     } catch (error) {
       throw error;
     }
+  }
+
+  async getBookingInfoById(id: string): Promise<any> {
+    try {
+      console.log(id);
+    } catch (error) {}
   }
 
   async reserveRoom(
@@ -34,6 +44,10 @@ export class BookingService {
     roomId: string,
   ): Promise<{ message: string; bookingInfo?: Booking }> {
     try {
+      console.log('userId:', userId);
+      console.log('form Data:', reserveForm);
+      console.log('roomId: ', roomId);
+
       const room = await this.roomModel.findById(roomId);
 
       if (!room) {
@@ -42,7 +56,10 @@ export class BookingService {
       const roomStatus = room.bookingStatus;
 
       if (roomStatus === true) {
-        return { message: `room ${room.roomNumber} has been reserved` };
+        // return { message: `room ${room.roomNumber} has been reserved` };
+        throw new NotFoundException(
+          `room ${room.roomNumber} has been reserved`,
+        );
       }
 
       const user = await this.userModel.findById(userId);
@@ -55,7 +72,7 @@ export class BookingService {
       const checkInDate = new Date(reserveForm.checkInDate);
       const checkInOut = new Date(reserveForm.checkInOut);
       const booking = new this.bookingModel({
-        customerId: userId,
+        customer: userId,
         room: room,
         checkInDate: checkInDate,
         checkInOut: checkInOut,

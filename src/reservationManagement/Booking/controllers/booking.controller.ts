@@ -30,18 +30,22 @@ export class BookingController {
   getBookingHistoryById(@Param('id') id: string) {
     return this.bookingService.getBookingHistory(id);
   }
-
+  // xem thong tin dat phong chi tiet sau khi user dat phong => Hoa don
+  @Get('/get-bookingInfo-by-id/:id')
+  getBookingInfo(@Param('id') id: string) {
+    return this.bookingService.getBookingInfoById(id);
+  }
   // user dat phong
 
-  @Post('/reserve-room-id/:roomId')
+  @Post('/reserve-room-id/:id')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   reserveRoom(
-    @Param('roomId') roomId: string,
+    @Param('id') id: string,
     @Body() reserveForm: createReserveDto,
     @Request() req,
   ) {
     const userId = req.user.payload.id;
-    return this.bookingService.reserveRoom(userId, reserveForm, roomId);
+    return this.bookingService.reserveRoom(userId, reserveForm, id);
   }
 }
