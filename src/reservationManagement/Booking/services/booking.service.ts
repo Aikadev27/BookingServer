@@ -34,8 +34,20 @@ export class BookingService {
 
   async getBookingInfoById(id: string): Promise<any> {
     try {
-      console.log(id);
-    } catch (error) {}
+      const booking = await this.bookingModel
+        .findById(id)
+        .populate('room')
+        .populate('customer', 'username email address phoneNumber -_id')
+        .select('-createdAt -updatedAt -__v -_id');
+      if (!booking) {
+        throw new NotFoundException(
+          `cannot get booking information with id : ${id}`,
+        );
+      }
+      return booking;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async reserveRoom(
