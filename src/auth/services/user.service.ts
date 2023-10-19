@@ -28,7 +28,7 @@ export class UserService {
 
   //   getAllUser
   async getAllUser(): Promise<any> {
-    return await this.userModel.find();
+    return await this.userModel.find().select('-password -__v -bookingHistory');
   }
   // get by Id
 
@@ -36,7 +36,7 @@ export class UserService {
     try {
       const findUser = await this.userModel
         .findById(id)
-        .select('-password')
+        .select('-password ')
         .exec();
 
       if (!findUser) {
@@ -88,7 +88,9 @@ export class UserService {
 
   async findListUserByRole(role: string): Promise<any[]> {
     try {
-      const listUser: User[] = await this.userModel.find({ role: role });
+      const listUser: User[] = await this.userModel
+        .find({ role: role })
+        .select('-password -__v -bookingHistory');
       if (listUser.length === 0) {
         throw new NotFoundException(
           `list user with role is: ${role} not exist`,
