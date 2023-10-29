@@ -103,6 +103,8 @@ export class HotelService {
 
   // get list hotels by location(city)
   async getHotelsByCity(city: string): Promise<Hotel[]> {
+    console.log(city);
+
     try {
       const locationsInCity = await this.locationModel.find({ city });
       if (!locationsInCity || locationsInCity.length < 1) {
@@ -191,6 +193,39 @@ export class HotelService {
       await hotel.save();
 
       return { message: 'delete image success' };
+    } catch (error) {
+      throw error;
+    }
+  }
+  // search hotel
+  async searchHotelsByName(nameHotel: string): Promise<Hotel[]> {
+    try {
+      const decodedNameHotel = decodeURIComponent(nameHotel);
+      const listHotel = await this.hotelModel
+        .find({
+          nameHotel: { $regex: new RegExp(decodedNameHotel, 'i') },
+        })
+        .exec();
+      if (listHotel.length === 0) {
+        return [];
+      }
+      return listHotel;
+    } catch (error) {
+      throw error;
+    }
+  }
+  // searchHotelsByRating
+  async searchHotelsByRating(rating: number): Promise<Hotel[]> {
+    try {
+      const listHotel = await this.hotelModel
+        .find({
+          averageRating: { $gte: rating },
+        })
+        .exec();
+      if (!listHotel || listHotel.length === 0) {
+        return [];
+      }
+      return listHotel;
     } catch (error) {
       throw error;
     }

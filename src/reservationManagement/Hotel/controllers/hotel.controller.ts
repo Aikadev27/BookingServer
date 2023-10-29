@@ -90,4 +90,15 @@ export class HotelController {
   ) {
     return this.hotelService.deleteImgByIndex(hotelId, imgIndex);
   }
+
+  @Get('/search/:nameHotel')
+  searchHotelsByName(@Param('nameHotel') nameHotel: string) {
+    console.log(nameHotel);
+
+    return this.hotelService.searchHotelsByName(nameHotel);
+  }
+  @Get('/search/:rating')
+  searchHotelsByRating(@Param('rating') rating: number) {
+    return this.hotelService.searchHotelsByRating(rating);
+  }
 }
