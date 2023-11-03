@@ -114,4 +114,16 @@ export class RoomService {
       throw error;
     }
   }
+
+  async deleteRoomById(roomId: string) {
+    try {
+      const room = await this.roomModel.findByIdAndDelete(roomId);
+      if (!room) {
+        throw new NotFoundException('not found this room ??');
+      }
+      return { message: 'Delete room success' };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

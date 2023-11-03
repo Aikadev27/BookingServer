@@ -50,6 +50,14 @@ export class RoomController {
     return this.roomService.deleteImgByIndex(roomId, imgIndex);
   }
 
+  @Delete('/deleteRoomById/:id')
+  @Roles('business')
+  @UseGuards(AuthGuard, RolesGuard)
+  deleteRoomById(@Param('id') id: string) {
+    return this.roomService.deleteRoomById(id);
+  }
+
+  //
   @Post('/create-room-by-hotel-id/:hotelId')
   @Roles('business')
   @UseGuards(AuthGuard, RolesGuard)
@@ -65,7 +73,7 @@ export class RoomController {
   @Patch('update-room-by-id/:id')
   @Roles('business')
   @UseGuards(AuthGuard, RolesGuard)
-  updateRoomById(@Param('id') id: string, @Body() updateData) {
+  updateRoomById(@Param('id') id: string, @Body() updateData: createRoomDto) {
     return this.roomService.updateRoomById(id, updateData);
   }
 }

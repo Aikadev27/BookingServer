@@ -15,4 +15,6 @@ export class createRoomDto {
 
   @IsNotEmpty()
   floor: number;
+
+  bookingStatus: boolean;
 }
