@@ -3,12 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Review } from '../schema/Review.schema';
 import { Model } from 'mongoose';
 import { Hotel } from '../schema/Hotel.schema';
+import { User } from 'src/auth/schemas/User.schema';
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectModel(Review.name) private reviewModel: Model<Review>,
     @InjectModel(Hotel.name) private hotelModel: Model<Hotel>,
+    @InjectModel(User.name) private userModel: Model<User>,
   ) {}
   async reviewAndRating(hotelId: string, userId, createReview) {
     try {
@@ -16,10 +18,13 @@ export class ReviewService {
       if (!hotel) {
         throw new NotFoundException('cannot find hotel');
       }
-
+      const user = await this.userModel.findById(userId);
+      if (!user) {
+        throw new NotFoundException('cannot find user');
+      }
       const review = new this.reviewModel({
         ...createReview,
-        userId,
+        user,
         hotelId,
       });
       hotel.reviews.push(review);
@@ -31,7 +36,7 @@ export class ReviewService {
       );
       await review.save();
       await hotel.save();
-      return hotel;
+      return { message: 'post review complete' };
     } catch (error) {
       throw error;
     }
@@ -103,9 +108,16 @@ export class ReviewService {
 
   async getReviewsByHotel(id: string) {
     try {
-      const hotel = await this.hotelModel
-        .findById(id)
-        .populate('reviews', '-hotelId  -__v');
+      const hotel = await this.hotelModel.findById(id).populate({
+        path: 'reviews',
+        populate: {
+          path: 'user',
+          model: 'User',
+          select: 'username -_id avatarUrl',
+        },
+        select: '-__v -hotelId',
+      });
+
       if (!hotel) {
         throw new NotFoundException(`hotel with id ${id} not found `);
       }

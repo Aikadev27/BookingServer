@@ -22,7 +22,7 @@ export class ReviewController {
   constructor(private reviewService: ReviewService) {}
 
   //   create rating and comment
-  @Post('/rating-by-id/:id/review')
+  @Post('/rating-by-id/:id/create')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   createRatingAndReview(
@@ -57,15 +57,15 @@ export class ReviewController {
   }
 
   @Get('/get-reviews-by-hotel-id/:id')
-  @Roles('business')
-  @UseGuards(AuthGuard, RolesGuard)
+  // @Roles('business')
+  // @UseGuards(AuthGuard, RolesGuard)
   getReviewsByHotel(@Param('id') id: string) {
     return this.reviewService.getReviewsByHotel(id);
   }
 
   @Get('/get-reviews-hotel/:hotelId/by-star/:star')
-  @Roles('admin', 'business')
-  @UseGuards(AuthGuard, RolesGuard)
+  // @Roles('admin', 'business')
+  // @UseGuards(AuthGuard, RolesGuard)
   getReviewsByStar(
     @Param('hotelId') hotelId: string,
     @Param('star') star: number,
