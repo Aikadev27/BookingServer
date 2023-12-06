@@ -74,10 +74,13 @@ export class HotelController {
     return this.hotelService.deleteHotelById(id);
   }
 
-  @Patch('/add-img-by-id/:hotelId')
+  @Post('/add-img-by-id/:hotelId')
   @Roles('business')
   @UseGuards(AuthGuard, RolesGuard)
-  addImage(@Param('hotelId') hotelId: string, @Body() { imageUrl }) {
+  addImage(
+    @Param('hotelId') hotelId: string,
+    @Body() { imageUrl }: { imageUrl: string[] },
+  ) {
     return this.hotelService.addImage(hotelId, imageUrl);
   }
 

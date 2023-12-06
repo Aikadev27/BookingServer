@@ -166,13 +166,15 @@ export class HotelService {
     }
   }
 
-  async addImage(hotelId, imageUrl) {
+  async addImage(hotelId, imageUrl: string[]) {
     try {
       const hotel = await this.hotelModel.findById(hotelId);
       if (!hotel) {
         throw new NotFoundException();
       }
-      hotel.featuredImageUrl.push(imageUrl);
+
+      // hotel.featuredImageUrl.push(imageUrl);
+      hotel.featuredImageUrl = hotel.featuredImageUrl.concat(imageUrl);
       await hotel.save();
       return { message: 'add image success' };
     } catch (error) {
